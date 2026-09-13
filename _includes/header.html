@@ -1,0 +1,116 @@
+<style>
+/* ── Sticky navbar (al-folio / Jun Li style) ──────────── */
+.site-nav-outer{
+  position:sticky;top:0;z-index:1000;
+  background:linear-gradient(90deg,#eaf6fb 0%,#eafaf5 100%);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid #d9ece8;
+  transition:box-shadow .2s ease,border-color .2s ease;
+}
+.site-nav-outer.scrolled{
+  box-shadow:0 2px 16px rgba(0,0,0,.08);
+  border-bottom-color:#e5e7eb;
+}
+
+.site-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;
+  padding:.85rem 1rem;
+}
+.site-nav-brand{
+  text-decoration:none;
+  font-size:1.1rem;font-weight:800;color:#111827;
+  letter-spacing:-.01em;
+}
+.site-nav-brand:hover{color:#0d9488}
+
+.site-nav-links{
+  display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;
+}
+.site-nav-links a{
+  font-size:.9rem;font-weight:500;color:#4b5563;
+  text-decoration:none;padding-bottom:2px;
+  border-bottom:1.5px solid transparent;
+  transition:color .15s,border-color .15s;
+  white-space:nowrap;
+}
+.site-nav-links a:hover{color:#0d9488;border-bottom-color:#0d9488}
+.site-nav-links a.active{color:#0d9488;border-bottom-color:#0d9488;font-weight:700}
+.site-nav-links a.nav-cv{
+  color:#0d9488;font-weight:700;
+  border:1px solid #99f6e4;border-radius:999px;
+  padding:.26rem .8rem;
+}
+.site-nav-links a.nav-cv:hover{background:#f0fdfa;border-bottom-color:#99f6e4}
+
+/* Hamburger (mobile) */
+.nav-toggle{
+  display:none;flex-direction:column;gap:4px;cursor:pointer;
+  padding:.4rem;border:none;background:transparent;
+}
+.nav-toggle span{
+  display:block;width:20px;height:2px;
+  background:#374151;border-radius:2px;
+}
+
+@media(max-width:680px){
+  .nav-toggle{display:flex}
+  .site-nav-links{
+    display:none;flex-direction:column;align-items:flex-start;gap:.15rem;
+    width:100%;
+    padding-top:.8rem;margin-top:.6rem;
+    border-top:1px solid #e5e7eb;
+  }
+  .site-nav-links.open{display:flex}
+  .site-nav-links a{padding:.5rem 0;width:100%;border-bottom:none}
+  .site-nav-links a.active{border-bottom:none;background:#f0fdfa;
+    padding-left:.5rem;border-radius:6px}
+  .site-nav-links a.nav-cv{width:auto;margin-top:.3rem}
+}
+</style>
+
+<div class="site-nav-outer" id="site-nav-outer">
+  <nav class="site-nav col-lg-8 mx-auto" role="navigation" aria-label="Main navigation">
+
+    <a class="site-nav-brand" href="{{ site.github.url }}/">{{ site.title }}</a>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false"
+      onclick="var m=document.getElementById('nav-menu');var open=m.classList.toggle('open');this.setAttribute('aria-expanded',open)">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="site-nav-links" id="nav-menu" role="menubar">
+      {% for item in site.data.settings.menu %}
+        {% if item.name == "CV" %}
+          <a class="nav-cv" href="{{ site.github.url }}/publications/Md_Babul_Islam_CV_2023.pdf"
+             target="_blank" rel="noopener">CV</a>
+        {% elsif item.name == "Services" %}
+          <a href="{{ site.github.url }}/services"
+            {% if page.url == "/services" or page.url == "/services/" %}class="active"{% endif %}>
+            {{ item.name }}
+          </a>
+        {% else %}
+          {% assign url_slash = item.url | append: "/" %}
+          <a href="{{ site.github.url }}{{ item.url }}"
+            {% if page.url == item.url or page.url == url_slash %}class="active"{% endif %}>
+            {{ item.name }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </nav>
+</div>
+
+<script>
+(function(){
+  var el = document.getElementById('site-nav-outer');
+  if(!el) return;
+  function onScroll(){
+    if(window.scrollY > 8){ el.classList.add('scrolled'); }
+    else { el.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
